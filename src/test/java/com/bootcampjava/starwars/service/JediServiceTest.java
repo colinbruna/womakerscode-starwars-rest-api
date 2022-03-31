@@ -16,31 +16,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@ExtendWith(SpringExtension.class) //sempre precisa colocar essa anotação na classe de teste
-@SpringBootTest //anotação da classe de teste do próprio spring
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class JediServiceTest {
 
-    @Autowired //sobrescrevendo a minha classe JediService
+    @Autowired
     private JediService jediService;
 
-    @MockBean //mock de uma classe
+    @MockBean
     private JediRepositoryImpl jediRepository;
 
-    //teste para caso seja encontrado com sucesso
     @Test
     @DisplayName("Should return Jedi with success")
     public void testFindBySuccess() {
 
         // cenario
-        Jedi mockJedi = new Jedi(1, "Jedi Name", 10, 1); //mock de um objeto
-        Mockito.doReturn(Optional.of(mockJedi)).when(jediRepository).findById(1); //Retornar um optional de um mockJedi quando o jediRepository for id 1
+        Jedi mockJedi = new Jedi(1, "Jedi Name", 10, 1);
+        Mockito.doReturn(Optional.of(mockJedi)).when(jediRepository).findById(1);
 
         // execucao
-        Optional<Jedi> returnedJedi = jediService.findById(1); //Optional da classe Jedi
+        Optional<Jedi> returnedJedi = jediService.findById(1);
 
         // assert
-        Assertions.assertTrue(returnedJedi.isPresent(), "Jedi was not found"); //garantir que o Jedi retornado está presente, com esta mensagem caso não seja achado
-        Assertions.assertSame(returnedJedi.get(), mockJedi, "Jedis must be the same"); //meu jedi retornado tem que ser o mesmo do mock, senão retorna uma mensagem
+        Assertions.assertTrue(returnedJedi.isPresent(), "Jedi was not found");
+        Assertions.assertSame(returnedJedi.get(), mockJedi, "Jedis must be the same");
     }
 
     // TODO: Criar teste de erro NOT FOUND

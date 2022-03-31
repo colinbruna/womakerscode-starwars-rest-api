@@ -4,10 +4,11 @@
 
 ### JediServiceTest
 
-- [ ] Criar teste de erro NOT FOUND
+- [x] Criar teste de erro NOT FOUND
 - [ ] Criar um teste pro findAll();
   
 ### JediControllerTest
+- [x] Teste do POST com sucesso
 - [ ] Teste do PUT com sucesso
 - [ ] Teste do PUT com uma versao igual da ja existente - deve retornar um conflito
 - [ ] Teste do PUT com erro - not found

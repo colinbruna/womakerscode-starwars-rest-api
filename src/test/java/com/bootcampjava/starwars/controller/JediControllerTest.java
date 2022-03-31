@@ -1,6 +1,7 @@
 package com.bootcampjava.starwars.controller;
 
 import com.bootcampjava.starwars.model.Jedi;
+import com.bootcampjava.starwars.repository.JediRepository;
 import com.bootcampjava.starwars.service.JediService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -16,25 +17,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
-import java.util.Optional;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@AutoConfigureMockMvc //essa biblioteca serve para mockar rotas e mockar o retorno delas
+@AutoConfigureMockMvc
 public class JediControllerTest {
 
-    @MockBean //anotação para a classe ter os mesmos comportamentos, porém com retornos simulados
+    @MockBean
     private JediService jediService;
 
     @Autowired
@@ -42,17 +37,15 @@ public class JediControllerTest {
 
     @Test
     @DisplayName("GET /jedi/1 - SUCCESS")
-    // como esse teste está na camada de controller, queremos que estoure uma Exception
     public void testGetJediByIdWithSuccess() throws Exception {
 
         // cenario
-        Jedi mockJedi = new Jedi(1, "HanSolo", 10, 1); //aqui estou mockando um jedi
-        Mockito.doReturn(Optional.of(mockJedi)).when(jediService).findById(1); //retornar um opcional mockjedi quando o jediservice procurar por id
+        Mockito.doReturn(Optional.of(buildJedi())).when(jediService).findById(1); //retornar um opcional mockjedi quando o jediservice procurar por id
 
         // execucao
         mockMvc.perform(get("/jedi/{id}", 1)) //método perform vai construir a minha URI e vai pegar os status que eu quero que essa URI retorne
 
-                // asserts
+                // assert
                 .andExpect(status().isOk()) //espero que retorne um status - ok
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON)) //espero que o retorno seja um json
 
@@ -73,14 +66,34 @@ public class JediControllerTest {
         // cenario
         Mockito.doReturn(Optional.empty()).when(jediService).findById(1);
 
-        //execucao
+        // execucao
         mockMvc.perform(get("/jedi/{1}", 1))
 
-                //asserts
+                // assert
                 .andExpect(status().isNotFound());
     }
 
     // TODO: Teste do POST com sucesso
+    @Test
+    @DisplayName("POST /jedi/ - Success")
+    public void testPostWithSuccess() throws Exception {
+
+        // cenario
+        Jedi jedi = buildJedi(); // crio meu Jedi
+        String json = asJsonString(jedi); // converto meu Jedi para json
+        Mockito.doReturn(jedi).when(jediService).save(jedi);
+
+        // execucao
+        mockMvc.perform(
+                    post("/jedi/")
+                   .contentType("application/json;charset=UTF-8")
+                   .content(json))
+
+                // assert
+                .andExpect(status().isCreated())
+                .andExpect(header().string(HttpHeaders.ETAG, "\"1\""))
+                .andExpect(content().string(json));
+    }
 
     // TODO: Teste do PUT com sucesso
 
@@ -101,5 +114,9 @@ public class JediControllerTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Jedi buildJedi() {
+        return new Jedi(1, "HanSolo", 10, 1);
     }
 }

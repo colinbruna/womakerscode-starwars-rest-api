@@ -45,4 +45,19 @@ public class Jedi {
     public void setVersion(int version) {
         this.version = version;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Jedi)) return false;
+
+        Jedi jedi = (Jedi) o;
+
+        return id.equals(jedi.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
