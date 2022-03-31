@@ -40,17 +40,17 @@ public class JediControllerTest {
     public void testGetJediByIdWithSuccess() throws Exception {
 
         // cenario
-        Mockito.doReturn(Optional.of(buildJedi())).when(jediService).findById(1); //retornar um opcional mockjedi quando o jediservice procurar por id
+        Mockito.doReturn(Optional.of(buildJedi())).when(jediService).findById(1);
 
         // execucao
-        mockMvc.perform(get("/jedi/{id}", 1)) //método perform vai construir a minha URI e vai pegar os status que eu quero que essa URI retorne
+        mockMvc.perform(get("/jedi/{id}", 1))
 
                 // assert
-                .andExpect(status().isOk()) //espero que retorne um status - ok
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON)) //espero que o retorno seja um json
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
-                .andExpect(header().string(HttpHeaders.ETAG, "\"1\"")) //espero que o retorno seja em forma de string
-                .andExpect(header().string(HttpHeaders.LOCATION, "/jedi/1")) //e que também tenha a localização
+                .andExpect(header().string(HttpHeaders.ETAG, "\"1\""))
+                .andExpect(header().string(HttpHeaders.LOCATION, "/jedi/1"))
 
                 //o que queremos que tenha no retorno
                 .andExpect(jsonPath("$.id", is(1)))
@@ -79,8 +79,8 @@ public class JediControllerTest {
     public void testPostWithSuccess() throws Exception {
 
         // cenario
-        Jedi jedi = buildJedi(); // crio meu Jedi
-        String json = asJsonString(jedi); // converto meu Jedi para json
+        Jedi jedi = buildJedi();
+        String json = asJsonString(jedi);
         Mockito.doReturn(jedi).when(jediService).save(jedi);
 
         // execucao

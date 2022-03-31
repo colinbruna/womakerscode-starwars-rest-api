@@ -9,14 +9,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-//Anotação usada para o Spring reconhecer que essa é a classe de serviço.
 @Service
 public class JediService {
 
-    //Foi colocada uma classe de logger, usada para criar logs da aplicação ao invés de colocar sistem.out.print. Então quando, a aplicação rodar nos testes tem como saber da onde ela está vindo.
     private static final Logger logger = LogManager.getLogger(JediService.class);
 
-    //repository
     private final JediRepositoryImpl jediRepositoryImpl;
 
     public JediService(JediRepositoryImpl jediRepositoryImpl) {
