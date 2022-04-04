@@ -28,7 +28,7 @@ public class JediServiceTest {
 
     @Test
     @DisplayName("Should return Jedi with success")
-    public void testFindBySuccess() {
+    public void findBySuccessTest() {
 
         // cenario
         Jedi mockJedi = new Jedi(1, "Jedi Name", 10, 1);
@@ -45,7 +45,7 @@ public class JediServiceTest {
     // TODO: Criar teste de erro NOT FOUND
     @Test
     @DisplayName("Jedi not found")
-    public void testIdNotFound() {
+    public void idNotFoundTest() {
         // cenario
         Mockito.doReturn(Optional.empty()).when(jediRepository).findById(1);
 
@@ -59,7 +59,7 @@ public class JediServiceTest {
     // TODO: Criar um teste pro findAll();
     @Test
     @DisplayName("Should find all Jedis")
-    public void testFindAll() {
+    public void findAllTest() {
 
         //cenario
         Jedi mockJedi = new Jedi(1, "Jedi Name", 10, 1);
@@ -74,7 +74,26 @@ public class JediServiceTest {
 
         // assert
         Assertions.assertFalse(returnedJedisList.isEmpty(),"The list cannot be empty");
-        //outro teste
-        //Assertions.assertSame(returnedJedisList.size(), 2, "The list is not complete");
+    }
+
+    @Test
+    @DisplayName("Should confirm list size")
+    public void listSizeTest() {
+
+        // cenario
+        Jedi mockJedi = new Jedi(1, "Jedi Name", 10, 1);
+        Jedi mockJedi2 = new Jedi(2, "Jedi Name 2", 10, 1);
+        Jedi mockJedi3 = new Jedi(3, "Jedi Name 3", 10, 1);
+        List<Jedi> mockJediList = new ArrayList<>();
+        mockJediList.add(mockJedi);
+        mockJediList.add(mockJedi2);
+        mockJediList.add(mockJedi3);
+        Mockito.doReturn(mockJediList).when(jediRepository).findAll();
+
+        // execucao
+        List<Jedi> returnedJedisList = jediService.findAll();
+
+        // assert
+        Assertions.assertSame(returnedJedisList.size(), 3, "The list is not complete");
     }
 }

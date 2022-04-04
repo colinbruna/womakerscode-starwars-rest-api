@@ -5,7 +5,7 @@
 ### JediServiceTest
 
 - [x] Criar teste de erro NOT FOUND
-- [ ] Criar um teste pro findAll();
+- [x] Criar um teste pro findAll();
   
 ### JediControllerTest
 - [x] Teste do POST com sucesso
